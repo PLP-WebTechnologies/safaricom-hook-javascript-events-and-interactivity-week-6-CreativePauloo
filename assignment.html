@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Webpage</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        transition: background-color 0.3s ease;
+      }
+      .container {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        box-shadow: 0px 0px 10px gray;
+        z-index: 1000;
+      }
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+      .error {
+        color: red;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Toggle Background Button -->
+      <button onclick="toggleBackground()">Toggle Background</button>
+
+      <!-- Text Size Slider -->
+      <p id="text">Adjust my size with the slider</p>
+      <input
+        type="range"
+        min="12"
+        max="40"
+        value="16"
+        oninput="adjustTextSize(this.value)"
+      />
+
+      <!-- Modal -->
+      <button onclick="showModal()">Open Modal</button>
+      <div class="modal-overlay" onclick="closeModal()"></div>
+      <div class="modal">
+        <p>This is a modal</p>
+        <button onclick="closeModal()">Close</button>
+      </div>
+
+      <!-- Form with Validation -->
+      <h3>Form Validation</h3>
+      <form id="myForm">
+        <label>Name:</label>
+        <input type="text" id="name" />
+        <p class="error" id="nameError"></p>
+
+        <label>Email:</label>
+        <input type="email" id="email" />
+        <p class="error" id="emailError"></p>
+
+        <label>Password:</label>
+        <input type="password" id="password" />
+        <p class="error" id="passwordError"></p>
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <!-- Bonus: Dropdown -->
+      <h3>Select an option</h3>
+      <select id="dropdown" onchange="showMessage()">
+        <option value="">-- Select --</option>
+        <option value="hello">Hello</option>
+        <option value="welcome">Welcome</option>
+      </select>
+      <p id="dropdownMessage"></p>
+    </div>
+
+    <script>
+      // Toggle background color
+      function toggleBackground() {
+        document.body.style.backgroundColor =
+          document.body.style.backgroundColor === "lightblue"
+            ? "white"
+            : "lightblue";
+      }
+
+      // Adjust text size
+      function adjustTextSize(size) {
+        document.getElementById("text").style.fontSize = size + "px";
+      }
+
+      // Show and close modal
+      function showModal() {
+        document.querySelector(".modal").style.display = "block";
+        document.querySelector(".modal-overlay").style.display = "block";
+      }
+
+      function closeModal() {
+        document.querySelector(".modal").style.display = "none";
+        document.querySelector(".modal-overlay").style.display = "none";
+      }
+
+      // Form validation
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+          let valid = true;
+
+          // Name validation
+          let name = document.getElementById("name").value;
+          if (name.length < 3) {
+            document.getElementById("nameError").textContent =
+              "Name must be at least 3 characters.";
+            valid = false;
+          } else {
+            document.getElementById("nameError").textContent = "";
+          }
+
+          // Email validation
+          let email = document.getElementById("email").value;
+          let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+          if (!email.match(emailPattern)) {
+            document.getElementById("emailError").textContent =
+              "Enter a valid email.";
+            valid = false;
+          } else {
+            document.getElementById("emailError").textContent = "";
+          }
+
+          // Password validation
+          let password = document.getElementById("password").value;
+          let passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+          if (!password.match(passwordPattern)) {
+            document.getElementById("passwordError").textContent =
+              "Password must be at least 8 characters, include an uppercase letter and a number.";
+            valid = false;
+          } else {
+            document.getElementById("passwordError").textContent = "";
+          }
+
+          if (!valid) {
+            event.preventDefault();
+          }
+        });
+
+      // Dropdown message
+      function showMessage() {
+        let dropdown = document.getElementById("dropdown");
+        let message =
+          dropdown.value === "hello"
+            ? "Hello there!"
+            : dropdown.value === "welcome"
+            ? "Welcome to the site!"
+            : "";
+        document.getElementById("dropdownMessage").textContent = message;
+      }
+    </script>
+  </body>
+</html>
